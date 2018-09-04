@@ -3,8 +3,7 @@ package org.tech.java.util;
 import java.math.BigDecimal;
 
 /**
- * Title: 格式化单位 kb/M/G/Tb
- * Description: TestDemo
+ * 格式化单位 kb/M/G/Tb
  */
 public class FlowFormatUtil {
 

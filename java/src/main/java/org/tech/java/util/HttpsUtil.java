@@ -16,6 +16,9 @@ import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
+/**
+ * HTTPS请求
+ */
 public class HttpsUtil {
     private static final Logger logger = LoggerFactory.getLogger(HttpsUtil.class);
 
