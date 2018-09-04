@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+	http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-3.1.xsd">
+	
+	<!-- 注解扫描  -->
+	<context:component-scan base-package="org.tech">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+<!-- 	<context:component-scan base-package="org.tech"/> -->
+	
+	<!-- 声明自动为Spring容器中那些配置@aspectJ切面的bean创建代理，织入切面 -->
+	<aop:aspectj-autoproxy />
+	
+	<!-- 配置文件加载 -->
+	<bean id="configBean"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:/jdbc.properties</value>
+				<value>classpath:/hibernate.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 数据库属性解析,需加密时取消注释 -->
+	<!-- 
+	<bean id="dataSourcePropertiesEncrypt" class="org.tech.sys.util.DataSourcePropertiesEncryptFactoryBean">
+		<property name="properties">
+			<props>
+				<prop key="username">${jdbc.username}</prop>
+				<prop key="password">${jdbc.password}</prop>
+				<prop key="pd">CHIT_UPA</prop>
+			</props>
+		</property>
+	</bean>
+	-->
+	
+	<!--数据源bean -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driverClassName}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<!-- 密码加密时注释 -->
+		<!-- -->
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		 
+		<!-- 加密时取消注释 -->
+		<!--  
+		<property name="properties" ref="dataSourcePropertiesEncrypt"/>
+		-->
+		<property name="autoCommitOnClose" value="true" />
+		<property name="checkoutTimeout" value="${cpool.checkoutTimeout}" />
+		<property name="initialPoolSize" value="${cpool.minPoolSize}" />
+		<property name="minPoolSize" value="${cpool.minPoolSize}" />
+		<property name="maxPoolSize" value="${cpool.maxPoolSize}" />
+		<property name="maxIdleTime" value="${cpool.maxIdleTime}" />
+		<property name="acquireIncrement" value="${cpool.acquireIncrement}" />
+		<property name="maxIdleTimeExcessConnections" value="${cpool.maxIdleTimeExcessConnections}" />
+	</bean>
+	
+	<!-- jdbcTemplate -->
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					${hibernate.dialect}
+				</prop>
+				<prop key="hibernate.show_sql">
+					${hibernate.show_sql}
+				</prop>
+				<prop key="hibernate.hbm2ddl.auto">
+					${hibernate.hbm2ddl.auto}
+				</prop>
+				<prop key="hibernate.current_session_context_class">
+					org.springframework.orm.hibernate4.SpringSessionContext
+				</prop>
+				<prop key="hibernate.connect.autocommit">false</prop>
+
+				<!-- 缓存设置 -->
+				<!-- <prop key="hibernate.cache.provider_class">net.sf.ehcache.hibernate.EhCacheProvider</prop> 
+					<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop> -->
+			</props>
+		</property>
+		<property name="packagesToScan" value="org.tech.**.entity"/>
+	</bean>
+
+	<cache:annotation-driven cache-manager="ehCacheManager" />
+	
+	<!-- cacheManager工厂类 -->
+	<bean id="cacheManagerFactory"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"
+		p:shared="true"
+		p:configLocation="classpath:ehcache.xml" />
+		
+	<!-- 声明cacheManager -->
+	<bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager"
+		p:cacheManager-ref="cacheManagerFactory" />
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="get*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="find*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="query*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- 在Spring AOP中有两种代理方式，JDK动态代理和CGLIB代理。默认情况下，TargetObject实现了接口时，则采用JDK动态代理。强制使用CGLIB代理需要将 <aop:config>的 proxy-target-class属性设为true。 -->
+	<aop:config>
+		<aop:pointcut id="servicesPointcut" expression="execution(* org.tech..service.*ServiceImpl.*(..))" />
+		<aop:advisor pointcut-ref="servicesPointcut" advice-ref="txAdvice" />
+	</aop:config>
+	
+	<!-- 以下注入较特殊，shiro认证是需要，注解无法自动注入。 -->
+	<!-- DAO Bean -->
+	<bean id="baseDao" class="org.tech.spring.dao.BaseDaoImpl" autowire="byName">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<!-- Service Bean -->
+	<bean id="baseService" class="org.tech.spring.service.BaseServiceImpl" autowire="byName"/>
+
+	<!-- 文件上传拦截 (最大40MB) -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="70971520" />
+	</bean>
+	
+	<!-- 国际化资源配置 ：注意针对messageSource的配置一定要放此文件，否则代码中无法获取资源。-->
+	<!--  
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="fallbackToSystemLocale" value="false"/>
+		<property name="useCodeAsDefaultMessage" value="true"/>
+		<property name="basenames">
+			<list>
+				<value>classpath:messages</value>
+			</list>
+		</property>
+	</bean>
+	-->
+	
+	<!-- 使用通配符进行国际化配置 -->
+	<!-- <bean id="messageSource"
+		class="org.tech.sys.spring.ext.MultipleMessageSource">
+		<property name="fallbackToSystemLocale" value="false"/>
+		<property name="useCodeAsDefaultMessage" value="true"/>
+		<property name="basenames">
+			<list>
+				此处必需添加一个前缀否则jar包中的资源文件找不到
+ 				<value>classpath*:/locale/messages-*</value>
+			</list>
+		</property>
+	</bean> -->
+	
+	<!-- apache tiles 配置 
+	<bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">  
+		<property name="definitions">
+		    <list>
+		    	<value>/WEB-INF/tiles-defs.xml</value>
+		    </list>
+	  	</property>
+	  	<property name="preparerFactoryClass" value="org.springframework.web.servlet.view.tiles2.SpringBeanPreparerFactory"/>  
+	</bean>-->
+</beans>
