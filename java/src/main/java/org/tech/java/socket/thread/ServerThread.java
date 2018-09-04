@@ -2,7 +2,7 @@ package org.tech.java.socket.thread;
 
 /**
  * Created by SuPhoebe on 2015/12/27.
- * ·şÎñÆ÷Ïß³Ì´¦ÀíÀà
+ * æœåŠ¡å™¨çº¿ç¨‹å¤„ç†ç±»
  */
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,14 +13,14 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class ServerThread extends Thread {
-	// ºÍ±¾Ïß³ÌÏà¹ØµÄSocket
+	// å’Œæœ¬çº¿ç¨‹ç›¸å…³çš„Socket
 	Socket socket = null;
 
 	public ServerThread(Socket socket) {
 		this.socket = socket;
 	}
 
-	// Ïß³ÌÖ´ĞĞµÄ²Ù×÷£¬ÏìÓ¦¿Í»§¶ËµÄÇëÇó
+	// çº¿ç¨‹æ‰§è¡Œçš„æ“ä½œï¼Œå“åº”å®¢æˆ·ç«¯çš„è¯·æ±‚
 	public void run() {
 		InputStream is = null;
 		InputStreamReader isr = null;
@@ -28,25 +28,25 @@ public class ServerThread extends Thread {
 		OutputStream os = null;
 		PrintWriter pw = null;
 		try {
-			// »ñÈ¡ÊäÈëÁ÷£¬²¢¶ÁÈ¡¿Í»§¶ËĞÅÏ¢
+			// è·å–è¾“å…¥æµï¼Œå¹¶è¯»å–å®¢æˆ·ç«¯ä¿¡æ¯
 			is = socket.getInputStream();
 			isr = new InputStreamReader(is);
 			br = new BufferedReader(isr);
 			String info = null;
-			while ((info = br.readLine()) != null) {// Ñ­»·¶ÁÈ¡¿Í»§¶ËµÄĞÅÏ¢
-				System.out.println("ÎÒÊÇ·şÎñÆ÷£¬¿Í»§¶ËËµ£º" + info);
+			while ((info = br.readLine()) != null) {// å¾ªç¯è¯»å–å®¢æˆ·ç«¯çš„ä¿¡æ¯
+				System.out.println("æˆ‘æ˜¯æœåŠ¡å™¨ï¼Œå®¢æˆ·ç«¯è¯´ï¼š" + info);
 			}
-			socket.shutdownInput();// ¹Ø±ÕÊäÈëÁ÷
-			// »ñÈ¡Êä³öÁ÷£¬ÏìÓ¦¿Í»§¶ËµÄÇëÇó
+			socket.shutdownInput();// å…³é—­è¾“å…¥æµ
+			// è·å–è¾“å‡ºæµï¼Œå“åº”å®¢æˆ·ç«¯çš„è¯·æ±‚
 			os = socket.getOutputStream();
 			pw = new PrintWriter(os);
-			pw.write("»¶Ó­Äú£¡");
-			pw.flush();// µ÷ÓÃflush()·½·¨½«»º³åÊä³ö
+			pw.write("æ¬¢è¿æ‚¨ï¼");
+			pw.flush();// è°ƒç”¨flush()æ–¹æ³•å°†ç¼“å†²è¾“å‡º
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			// ¹Ø±Õ×ÊÔ´
+			// å…³é—­èµ„æº
 			try {
 				if (pw != null)
 					pw.close();

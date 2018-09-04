@@ -1,8 +1,8 @@
 package org.tech.java.nio;
 
-import java.nio.ByteBuffer;
-
 import sun.nio.ch.DirectBuffer;
+
+import java.nio.ByteBuffer;
 
 /**
  * http://blog.csdn.net/xieyuooo/article/details/7547435
@@ -12,7 +12,7 @@ import sun.nio.ch.DirectBuffer;
  * @author chit
  *
  */
-public class TestDirectByteBuffer {
+public class DirectByteBufferTest {
 
 	public static void main(String[] args) {
 		ByteBuffer buffer = ByteBuffer.allocateDirect(1024 * 1024 * 100);

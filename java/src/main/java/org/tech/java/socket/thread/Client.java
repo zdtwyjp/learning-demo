@@ -16,28 +16,28 @@ public class Client {
 
 	public static void main(String[] args) {
 		try {
-			// 1.´´½¨¿Í»§¶ËSocket£¬Ö¸¶¨·şÎñÆ÷µØÖ·ºÍ¶Ë¿ÚºÅ
+			// 1.åˆ›å»ºå®¢æˆ·ç«¯Socketï¼ŒæŒ‡å®šæœåŠ¡å™¨åœ°å€å’Œç«¯å£å·
 			Socket socket = new Socket("127.0.0.1", 8888);
-			// 2.»ñÈ¡Êä³öÁ÷£¬ÓÃÀ´Ïò·şÎñÆ÷·¢ËÍĞÅÏ¢
-			OutputStream os = socket.getOutputStream();// ×Ö½ÚÊä³öÁ÷
-			// ×ª»»Îª´òÓ¡Á÷
+			// 2.è·å–è¾“å‡ºæµï¼Œç”¨æ¥å‘æœåŠ¡å™¨å‘é€ä¿¡æ¯
+			OutputStream os = socket.getOutputStream();// å­—èŠ‚è¾“å‡ºæµ
+			// è½¬æ¢ä¸ºæ‰“å°æµ
 			PrintWriter pw = new PrintWriter(os);
 
 			long name = Math.abs(r.nextLong());
 			long pass = Math.abs(r.nextLong());
 
-			pw.write("ÓÃ»§Ãû£º" + name + "£»ÃÜÂë£º" + pass);
-			pw.flush();// Ë¢ĞÂ»º´æ£¬Ïò·şÎñÆ÷¶ËÊä³öĞÅÏ¢
-			// ¹Ø±ÕÊä³öÁ÷
+			pw.write("ç”¨æˆ·åï¼š" + name + "ï¼›å¯†ç ï¼š" + pass);
+			pw.flush();// åˆ·æ–°ç¼“å­˜ï¼Œå‘æœåŠ¡å™¨ç«¯è¾“å‡ºä¿¡æ¯
+			// å…³é—­è¾“å‡ºæµ
 			socket.shutdownOutput();
-			// 3.»ñÈ¡ÊäÈëÁ÷£¬ÓÃÀ´¶ÁÈ¡·şÎñÆ÷¶ËµÄÏìÓ¦ĞÅÏ¢
+			// 3.è·å–è¾“å…¥æµï¼Œç”¨æ¥è¯»å–æœåŠ¡å™¨ç«¯çš„å“åº”ä¿¡æ¯
 			InputStream is = socket.getInputStream();
 			BufferedReader br = new BufferedReader(new InputStreamReader(is));
 			String info = null;
 			while ((info = br.readLine()) != null) {
-				System.out.println("ÎÒÊÇ¿Í»§¶Ë£¬·şÎñÆ÷¶Ë·µ»ØµÄĞÅÏ¢ÊÇ£º" + info);
+				System.out.println("æˆ‘æ˜¯å®¢æˆ·ç«¯ï¼ŒæœåŠ¡å™¨ç«¯è¿”å›çš„ä¿¡æ¯æ˜¯ï¼š" + info);
 			}
-			// 4.¹Ø±Õ×ÊÔ´
+			// 4.å…³é—­èµ„æº
 			br.close();
 			is.close();
 			pw.close();

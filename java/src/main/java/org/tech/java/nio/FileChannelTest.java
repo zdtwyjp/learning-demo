@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
-public class TestFileChannel {
+public class FileChannelTest {
 	static int[] messages = {1,3,5,7};
 	public static void main(String[] args) throws Exception {
 		read();

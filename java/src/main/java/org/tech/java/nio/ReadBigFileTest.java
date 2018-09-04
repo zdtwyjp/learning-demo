@@ -13,7 +13,7 @@ import java.util.List;
  * @author Chillax 
  * 
  */  
-public class TestReadBigFile {  
+public class ReadBigFileTest {
   
     public static void main(String args[]) throws Exception {  
         int bufSize = 1024 * 2;//一次读取的字节长度  

@@ -11,7 +11,7 @@ import java.nio.channels.FileChannel;
  * 测试缓冲区
  * 
  */
-public class TestBuffer {
+public class BufferTest {
 	
 	public static void main(String[] args) throws Exception {
 		

@@ -10,25 +10,25 @@ import java.net.Socket;
 public class Server {
     public static void main(String[] args) {
         try {
-            //1.´´½¨Ò»¸ö·şÎñÆ÷¶ËSocket£¬¼´ServerSocket£¬Ö¸¶¨°ó¶¨µÄ¶Ë¿Ú£¬²¢¼àÌı´Ë¶Ë¿Ú
+            //1.åˆ›å»ºä¸€ä¸ªæœåŠ¡å™¨ç«¯Socketï¼Œå³ServerSocketï¼ŒæŒ‡å®šç»‘å®šçš„ç«¯å£ï¼Œå¹¶ç›‘å¬æ­¤ç«¯å£
             ServerSocket serverSocket=new ServerSocket(8888);
             Socket socket=null;
-            //¼ÇÂ¼¿Í»§¶ËµÄÊıÁ¿
+            //è®°å½•å®¢æˆ·ç«¯çš„æ•°é‡
             int count=0;
-            System.out.println("***·şÎñÆ÷¼´½«Æô¶¯£¬µÈ´ı¿Í»§¶ËµÄÁ¬½Ó***");
-            //Ñ­»·¼àÌıµÈ´ı¿Í»§¶ËµÄÁ¬½Ó
+            System.out.println("***æœåŠ¡å™¨å³å°†å¯åŠ¨ï¼Œç­‰å¾…å®¢æˆ·ç«¯çš„è¿æ¥***");
+            //å¾ªç¯ç›‘å¬ç­‰å¾…å®¢æˆ·ç«¯çš„è¿æ¥
             while(true){
-                //µ÷ÓÃaccept()·½·¨¿ªÊ¼¼àÌı£¬µÈ´ı¿Í»§¶ËµÄÁ¬½Ó
+                //è°ƒç”¨accept()æ–¹æ³•å¼€å§‹ç›‘å¬ï¼Œç­‰å¾…å®¢æˆ·ç«¯çš„è¿æ¥
                 socket=serverSocket.accept();
-                //´´½¨Ò»¸öĞÂµÄÏß³Ì
+                //åˆ›å»ºä¸€ä¸ªæ–°çš„çº¿ç¨‹
                 ServerThread serverThread=new ServerThread(socket);
-                //Æô¶¯Ïß³Ì
+                //å¯åŠ¨çº¿ç¨‹
                 serverThread.start();
 
-                count++;//Í³¼Æ¿Í»§¶ËµÄÊıÁ¿
-                System.out.println("¿Í»§¶ËµÄÊıÁ¿£º"+count);
+                count++;//ç»Ÿè®¡å®¢æˆ·ç«¯çš„æ•°é‡
+                System.out.println("å®¢æˆ·ç«¯çš„æ•°é‡ï¼š"+count);
                 InetAddress address=socket.getInetAddress();
-                System.out.println("µ±Ç°¿Í»§¶ËµÄIP£º"+address.getHostAddress());
+                System.out.println("å½“å‰å®¢æˆ·ç«¯çš„IPï¼š"+address.getHostAddress());
             }
         } catch (IOException e) {
             e.printStackTrace();
