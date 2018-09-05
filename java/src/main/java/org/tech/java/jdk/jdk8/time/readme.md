@@ -14,11 +14,11 @@ Java 8 在 java.time 包下提供了很多新的 API。以下为两个比较重�
 
 
 # java.time包
-java.time – 包含值对象的基础包
-java.time.chrono – 提供对不同的日历系统的访问
-java.time.format – 格式化和解析时间和日期
-java.time.temporal – 包括底层框架和扩展特性
-java.time.zone – 包含时区支持的类
+java.time–包含值对象的基础包
+java.time.chrono–提供对不同的日历系统的访问
+java.time.format–格式化和解析时间和日期
+java.time.temporal–包括底层框架和扩展特性
+java.time.zone–包含时区支持的类
 
 
 
