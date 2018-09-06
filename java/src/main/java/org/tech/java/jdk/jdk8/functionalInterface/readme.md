@@ -8,6 +8,10 @@ Java8的新引入，包含函数式的设计，接口都有@FunctionalInterface�
 一个单一函数。那理解这个单一就很重要了，单一不是说限制你一个interface里只有一个抽象方法，单是多个方法的其他方法需要是继承自Object的public方法，
 或者你要想绕过，就自己实现default。函数式接口自己本身一定是只有一个抽象方法。同时，如果是Object类的public方法，也是不允许的。
 
+函数式接口完全是为了Java 中Lambda的实现而定义的。在lambda的实现过程中，java开发团队选择利用SAM接口作为Lambda表达式的目标类型，
+凡是在函数式接口出现的地方，都可以接受一个Lambda表达式作为函数式接口的实现。（Lambda表达式不能脱离上下文单独存在，
+它必须要有一个明确的目标类型，该目标类型也就是函数式接口）
+
 如：
 ```
 @FunctionalInterface
