@@ -199,8 +199,8 @@ public class RSAUtil {
      * @throws Exception 
      */  
     public static void main(String[] args) throws Exception {  
-        String source = "test test test 1521527311000";//原文
-        String seed = "!@sdfsdfsdfsdfsdfdsfsdf#tip";//种子
+        String source = "test 1521527311000";//原文
+        String seed = "~!@#$%^&*()_+qwertyuiop[]asdfghjkl;'zxcvbnm,.";//种子
         
         System.out.println("原文：\n" + source);  
         Map<String, Object> keyMap = RSAUtil.initKey(seed);//初始化密钥
