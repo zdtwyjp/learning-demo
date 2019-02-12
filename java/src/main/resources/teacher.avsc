@@ -1,0 +1,8 @@
+{"namespace": "com.avro.model",  
+ "type": "record",  
+ "name": "Teacher",  
+ "fields": [  
+     {"name": "name", "type": "string"},  
+     {"name": "age",  "type": ["int", "null"]}
+ ]  
+}
