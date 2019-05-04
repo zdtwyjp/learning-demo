@@ -27,6 +27,7 @@ public class TeacherTest {
 			list.add(new Teacher("zhang"+i, i+1));
 		}
 
+
 		// to file
 		serializeAvroToFile(schema, list);
 		deserialzeAvroFromFile(schema);
